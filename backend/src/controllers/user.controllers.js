@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 const registerUser = async (req, res) => {
+  console.log("Entered here");
   try {
     const { username, email, password, phone } = req.body;
     if (!username || !email || !password || !phone) {
@@ -11,8 +12,15 @@ const registerUser = async (req, res) => {
         success: false,
       });
     }
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    const existingUserEmail = await User.findOne({ email });
+    if (existingUserEmail) {
+      return res.status(401).json({
+        message: "Email already exists",
+        success: false,
+      });
+    }
+    const existingUserName = await User.findOne({ username });
+    if (existingUserName) {
       return res.status(401).json({
         message: "Email already exists",
         success: false,
@@ -72,7 +80,7 @@ const loginUser = async (req, res) => {
         expiresIn: "2d",
       }
     );
-
+    console.log(user);
     const userData = {
       _id: user._id,
       username: user.username,
@@ -86,6 +94,7 @@ const loginUser = async (req, res) => {
         httpOnly: true,
         sameSite: true,
         maxAge: 1 * 24 * 60 * 60 * 1000,
+        secure: false,
       })
       .json({
         message: `welcome back ${user.username}`,
@@ -182,6 +191,22 @@ const getAllUser = async (req, res) => {
   }
 };
 
+const getMyInfo = async (req, res) => {
+  try {
+    const user = await User.findById(req.id);
+    return res.status(200).json({
+      message: "Successfully achieved",
+      user,
+      success:true
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: "Error occured achieved",
+    });
+  }
+};
+
 export {
   registerUser,
   loginUser,
@@ -189,4 +214,5 @@ export {
   logoutUser,
   getAllUser,
   getProfile,
+  getMyInfo
 };

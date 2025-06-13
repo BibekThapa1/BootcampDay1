@@ -3,6 +3,7 @@ import { isAdmin, isAuth } from "../middleware/auth.middleware.js";
 import {
   editProfile,
   getAllUser,
+  getMyInfo,
   getProfile,
   loginUser,
   logoutUser,
@@ -18,5 +19,6 @@ router.get("/logout", logoutUser);
 router.patch("/profile/edit", isAuth, editProfile);
 router.get("/profile/:id", isAuth, getProfile);
 router.get("/all", isAuth, isAdmin, getAllUser);
+router.get("/getMyInfo", isAuth, getMyInfo);
 
 export default router;
