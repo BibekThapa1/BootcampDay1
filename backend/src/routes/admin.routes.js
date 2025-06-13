@@ -14,6 +14,6 @@ router.get("/orders", isAdmin, getAllOrders);
 router.get("/orders/new", isAdmin, getNewOrdersCount);
 router.get("/orders/pending-count", isAdmin, getPendingOrdersCount);
 router.get("/dashboard-stats", isAdmin, getDashboardStats);
-router.get("/orders/:orderId", isAdmin, updateOrderStatus);
+router.put("/orders/:orderId", isAdmin, updateOrderStatus);
 
 export default router;
