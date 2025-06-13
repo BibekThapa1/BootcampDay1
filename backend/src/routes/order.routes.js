@@ -16,10 +16,10 @@ const router = Router();
 router.post("/", isAuth, createOrder);
 router.get("/all", isAdmin, getAllOrders);
 router.get("/my-orders", isAuth, getUserOrders);
-router.patch("/:orderId/status", isAdmin, updateOrderStatus);
+router.patch("/status/:orderId", isAdmin, updateOrderStatus);
 router.get("/:id", isAuth, getOrderById);
 router.delete("/:id", isAdmin, deleteOrder);
-router.put("/product/:id/stock", isAdmin, updateProductStock);
-router.put("/:orderId/cancel", isAuth, cancelOrder);
+router.put("/product/stock/:id", isAdmin, updateProductStock);
+router.put("/cancel/:orderId", isAuth, cancelOrder);
 
 export default router;
