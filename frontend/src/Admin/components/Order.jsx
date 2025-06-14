@@ -13,9 +13,6 @@ const Order = () => {
   const [imageLoadedMap, setImageLoadedMap] = useState({});
   const [imageErrorMap, setImageErrorMap] = useState({});
   const [newOrdersCount, setNewOrdersCount] = useState(0);
-  const [showPrintView, setShowPrintView] = useState(false);
-  const [selectedOrderForPrint, setSelectedOrderForPrint] = useState(null);
-  const printRef = useRef();
 
   const statusOptions = [
     {
@@ -197,125 +194,6 @@ const Order = () => {
 
   if (loading) return <Loading />;
 
-  if (showPrintView && selectedOrderForPrint) {
-    return (
-      <div className="p-8 bg-white" ref={printRef}>
-        <div className="print:hidden mb-4 flex justify-between">
-          <button
-            onClick={closePrintView}
-            className="px-4 py-2 bg-gray-200 rounded"
-          >
-            Back
-          </button>
-          <button
-            onClick={() => window.print()}
-            className="px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2"
-          >
-            <FaPrint /> Print Invoice
-          </button>
-        </div>
-
-        {/* Invoice Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold">CN MART - ORDER INVOICE</h1>
-          <p className="text-sm text-gray-600">
-            123 Market Street, Kathmandu, Nepal | Phone: +977 1234567890
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div>
-            <h3 className="font-bold">Order Information</h3>
-            <p>Order ID: #{selectedOrderForPrint._id}</p>
-            <p>
-              Date:{" "}
-              {format(
-                new Date(selectedOrderForPrint.createdAt),
-                "MMM d, yyyy h:mm a"
-              )}
-            </p>
-            <p>Status: {selectedOrderForPrint.status.toUpperCase()}</p>
-            <p>
-              Payment Method:{" "}
-              {selectedOrderForPrint.paymentMethod || "Cash on Delivery"}
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-bold">Customer Information</h3>
-            <p>Name: {selectedOrderForPrint.user?.name || "Customer"}</p>
-            <p>Email: {selectedOrderForPrint.user?.email || "Not provided"}</p>
-            <p>
-              Phone:{" "}
-              {selectedOrderForPrint.phone ||
-                selectedOrderForPrint.contactNumber ||
-                selectedOrderForPrint.user?.phone ||
-                "Not provided"}
-            </p>
-            <p>Shipping Address: {selectedOrderForPrint.shippingAddress}</p>
-          </div>
-        </div>
-
-        <table className="w-full border-collapse mb-6">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2 text-left">Product</th>
-              <th className="border p-2 text-right">Price</th>
-              <th className="border p-2 text-right">Quantity</th>
-              <th className="border p-2 text-right">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {selectedOrderForPrint.items.map((item, index) => (
-              <tr key={index}>
-                <td className="border p-2">
-                  {item.product?.name || "Product Unavailable"}
-                </td>
-                <td className="border p-2 text-right">
-                  Rs.{item.product?.price?.toFixed(2) || "0.00"}
-                </td>
-                <td className="border p-2 text-right">{item.quantity}</td>
-                <td className="border p-2 text-right">
-                  Rs.{((item.product?.price || 0) * item.quantity).toFixed(2)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan="3" className="border p-2 text-right font-bold">
-                Subtotal
-              </td>
-              <td className="border p-2 text-right">
-                Rs.{selectedOrderForPrint.total?.toFixed(2) || "0.00"}
-              </td>
-            </tr>
-            <tr>
-              <td colSpan="3" className="border p-2 text-right font-bold">
-                Shipping
-              </td>
-              <td className="border p-2 text-right">Rs.0.00</td>
-            </tr>
-            <tr>
-              <td colSpan="3" className="border p-2 text-right font-bold">
-                Total
-              </td>
-              <td className="border p-2 text-right font-bold">
-                Rs.{selectedOrderForPrint.total?.toFixed(2) || "0.00"}
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-
-        <div className="mt-10 pt-6 border-t">
-          <p className="text-center text-sm text-gray-600">
-            Thank you for your business!
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -382,13 +260,7 @@ const Order = () => {
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => handlePrintOrder(order)}
-                      className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-full transition-colors"
-                      title="Print Order"
-                    >
-                      <FaPrint className="w-5 h-5" />
-                    </button>
+                   
                     <select
                       value={order.status}
                       onChange={(e) =>

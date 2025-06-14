@@ -93,19 +93,7 @@ const ProductDetail = () => {
       return;
     }
     addToCart({ ...product, quantity });
-    toast.success("Added to cart!");
   };
-
-  const toggleWishlist = () => {
-    if (isInWishlist(product._id)) {
-      removeFromWishlist(product._id);
-      toast.success("Removed from wishlist");
-    } else {
-      addToWishlist(product);
-      toast.success("Added to wishlist");
-    }
-  };
-
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     try {
@@ -155,64 +143,6 @@ const ProductDetail = () => {
     }
   };
 
-  const handleReviewSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const formData = new FormData();
-      formData.append("orderId", location.state.orderId);
-      formData.append("itemId", location.state.itemId);
-
-      // Only append if values exist
-      if (rating > 0) {
-        formData.append("rating", rating);
-      }
-      if (comment.trim()) {
-        formData.append("comment", comment.trim());
-      }
-      if (reviewImage) {
-        formData.append("image", reviewImage);
-      }
-
-      const response = await api.post("/review/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.data.success) {
-        toast.success("Review submitted successfully");
-        setShowReviewModal(false);
-        setRating(0);
-        setComment("");
-        setReviewImage(null);
-        fetchProductAndReviews(); // Refresh reviews
-      }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Failed to submit review";
-      toast.error(errorMessage);
-    }
-  };
-
-  const renderStars = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-
-    for (let i = 1; i <= 5; i++) {
-      if (i <= fullStars) {
-        stars.push(<FaStar key={i} className="text-yellow-400" />);
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<FaStarHalf key={i} className="text-yellow-400" />);
-      } else {
-        stars.push(<FaRegStar key={i} className="text-yellow-400" />);
-      }
-    }
-
-    return stars;
-  };
-
   if (loading) return <Loading />;
   if (!product) return <div>Product not found</div>;
 
@@ -249,39 +179,9 @@ const ProductDetail = () => {
 
           {/* Right Column - Details */}
           <div className="flex flex-col">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 capitalize">
               {product.name}
             </h1>
-
-            <div className="flex items-center mb-4">
-              <div className="flex items-center">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      className={`w-5 h-5 ${
-                        i < Math.floor(product.rating)
-                          ? "text-yellow-400"
-                          : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="ml-2 text-sm text-gray-600">
-                  {product.rating > 0 ? (
-                    <>
-                      {product.rating.toFixed(1)} out of 5
-                      <span className="ml-1 text-gray-500">
-                        ({product.totalReviews || 0}{" "}
-                        {product.totalReviews === 1 ? "review" : "reviews"})
-                      </span>
-                    </>
-                  ) : (
-                    "No ratings yet"
-                  )}
-                </span>
-              </div>
-            </div>
 
             <p className="text-2xl md:text-3xl font-bold text-green-600 mb-4">
               Rs.{product.price}
