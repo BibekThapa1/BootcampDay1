@@ -15,6 +15,7 @@ const getAllProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {
   try {
+    console.log("Entered here");
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res
@@ -62,8 +63,11 @@ const addProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, category, stock, unit } = req.body;
-    const updateData = { name, description, price, category, stock, unit };
+    console.log("Entered Updated Product");
+    console.log(req.body);
+    const { name, description, price,  stock, unit } = req.body;
+    console.log("product detail",name, description, price,  stock, unit);
+    const updateData = { name, description, price,  stock, unit };
     const product = await Product.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
     });

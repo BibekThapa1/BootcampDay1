@@ -148,7 +148,9 @@ const getProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
+    console.log("asdfadsf333");
     const { username, email, phone } = req.body;
+    console.log(username, email, phone );
     const userId = req.id;
 
     const user = await User.findById(userId);

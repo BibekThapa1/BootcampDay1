@@ -20,7 +20,7 @@ app.use(cookieParser());
 import UserRouter from "./routes/user.routes.js";
 import ProductRouter from "./routes/product.routes.js";
 import AdminRouter from "./routes/admin.routes.js";
-import OrderRouter from "./routes/admin.routes.js";
+import OrderRouter from "./routes/order.routes.js";
 import CartRouter from "./routes/cart.routes.js";
 
 // Routes

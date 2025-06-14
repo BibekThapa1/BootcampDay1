@@ -18,7 +18,7 @@ router.get("/all", isAdmin, getAllOrders);
 router.get("/my-orders", isAuth, getUserOrders);
 router.patch("/status/:orderId", isAdmin, updateOrderStatus);
 router.get("/:id", isAuth, getOrderById);
-router.delete("/:id", isAdmin, deleteOrder);
+router.delete("/:id",isAuth, isAdmin, deleteOrder);
 router.put("/product/stock/:id", isAdmin, updateProductStock);
 router.put("/cancel/:orderId", isAuth, cancelOrder);
 

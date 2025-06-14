@@ -3,6 +3,7 @@ import Product from "../models/product.model.js";
 
 const createOrder = async (req, res) => {
   try {
+    console.log("Entered create order");
     const { items, total, shippingAddress, phone, city, paymentMethod } =
       req.body;
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -137,6 +138,7 @@ const getOrderById = async (req, res) => {
 
 const deleteOrder = async (req, res) => {
   try {
+    console.log("Deleted order");
     const order = await Order.findByIdAndDelete(req.params.id);
     if (!order) {
       return res
@@ -170,6 +172,7 @@ const updateProductStock = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
   try {
+    console.log("erdfadsentered");
     const { orderId } = req.params;
     const order = await Order.findOne({ _id: orderId, user: req.user._id });
     if (!order) {
